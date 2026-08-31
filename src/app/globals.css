@@ -2,8 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-  Este arquivo foi limpo. 
-  As variáveis do nosso Design System (cores, tipografia, animações) 
-  serão implementadas na Etapa 2.
-*/
+@layer base {
+  :root {
+    /* Background off-white para um visual limpo */
+    --background: 0 0% 98%;
+    /* Texto grafite profundo, menos agressivo que preto puro */
+    --foreground: 240 10% 12%;
+    
+    /* Verde Sálvia - Cor principal de progresso */
+    --primary: 147 15% 42%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Bege/Cinza quente para elementos secundários */
+    --secondary: 40 10% 92%;
+    --secondary-foreground: 24 10% 20%;
+    
+    /* Desabilitados e fundos discretos */
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 4% 46%;
+    
+    /* Bordas extremamente sutis */
+    --border: 240 6% 90%;
+    
+    /* Superfície de cards branca */
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    
+    --radius: 1rem;
+  }
+
+  .dark {
+    /* Preparação estrutural para o Dark Mode futuro */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --primary: 147 20% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --border: 240 4% 16%;
+    --card: 240 10% 6%;
+    --card-foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
+  }
+}
