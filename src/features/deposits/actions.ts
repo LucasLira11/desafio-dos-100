@@ -35,9 +35,29 @@ export async function registerDepositAction(amount: number, stepNumber: number) 
     return { error: "Erro interno ao registrar o depósito." };
   }
 
-  // Avisa o Next.js para limpar o cache de forma mais abrangente
-  revalidatePath("/dashboard");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
+  return { success: true };
+}
+
+// NOVA FUNÇÃO: Desfazer Depósito
+export async function undoDepositAction(depositId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
   
+  if (!user) return { error: "Usuário não autenticado." };
+
+  // O RLS (Row Level Security) já configurado no banco garante que este DELETE 
+  // só funcionará se o depósito pertencer ao desafio do próprio usuário logado.
+  const { error } = await supabase
+    .from("deposits")
+    .delete()
+    .eq("id", depositId);
+
+  if (error) {
+    console.error("Erro ao desfazer depósito:", error);
+    return { error: "Não foi possível desfazer este depósito." };
+  }
+
+  revalidatePath("/", "layout");
   return { success: true };
 }
