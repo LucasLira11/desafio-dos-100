@@ -44,12 +44,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* CONTEÚDO PRINCIPAL */}
-      <main className="flex-1 pb-24 md:pb-0 overflow-y-auto">
+      <main className="flex-1 pb-28 md:pb-0 overflow-y-auto">
         {children}
       </main>
 
-      {/* MOBILE BOTTOM NAV */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-card/90 backdrop-blur-md z-50 flex justify-around p-2 pb-4">
+      {/* MOBILE BOTTOM NAV COM SUPORTE A SAFE AREA */}
+      <nav 
+        className="md:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-card/90 backdrop-blur-md z-50 flex justify-around p-2"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 12px)' }}
+      >
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
