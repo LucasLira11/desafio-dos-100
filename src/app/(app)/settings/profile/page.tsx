@@ -4,7 +4,6 @@ import { LogOut, Settings, BellRing } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/features/auth/actions";
-import { ThemeSwitcher } from "@/features/settings/components/theme-switcher";
 import { PushButton } from "@/features/settings/components/push-button";
 
 export const dynamic = "force-dynamic";
@@ -69,18 +68,6 @@ export default async function ProfilePage() {
               <p className="font-bold text-lg text-foreground">{fullName}</p>
               <p className="text-sm text-muted-foreground">{email}</p>
             </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      {/* Preferências Visuais */}
-      <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          Aparência
-        </h2>
-        <Card className="shadow-sm">
-          <CardContent className="p-4">
-            <ThemeSwitcher />
           </CardContent>
         </Card>
       </section>

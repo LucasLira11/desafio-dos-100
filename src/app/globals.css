@@ -2,46 +2,56 @@
 
 @layer base {
   :root {
-    /* Background off-white para um visual limpo */
-    --background: 0 0% 98%;
-    /* Texto grafite profundo, menos agressivo que preto puro */
-    --foreground: 240 10% 12%;
-    
-    /* Verde Sálvia - Cor principal de progresso */
-    --primary: 147 15% 42%;
-    --primary-foreground: 0 0% 100%;
-    
-    /* Bege/Cinza quente para elementos secundários */
-    --secondary: 40 10% 92%;
-    --secondary-foreground: 24 10% 20%;
-    
-    /* Desabilitados e fundos discretos */
-    --muted: 240 5% 90%;
-    --muted-foreground: 240 4% 46%;
-    
-    /* Bordas extremamente sutis */
-    --border: 240 6% 90%;
-    
-    /* Superfície de cards branca */
+    /* MODO CLARO - Fundo claro, detalhes fortes */
+    --background: 140 20% 98%;
+    --foreground: 140 50% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 12%;
+    --card-foreground: 140 50% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 140 50% 10%;
     
+    /* AS CORES DO SEU LOGO */
+    --primary: 142 76% 36%; /* Verde Dinheiro */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 93% 47%; /* Dourado */
+    --secondary-foreground: 140 50% 10%;
+    
+    --muted: 140 20% 90%;
+    --muted-foreground: 140 10% 40%;
+    --accent: 45 93% 47%;
+    --accent-foreground: 140 50% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 140 20% 85%;
+    --input: 140 20% 85%;
+    --ring: 142 76% 36%;
     --radius: 1rem;
   }
 
   .dark {
-    /* Preparação estrutural para o Dark Mode futuro */
-    --background: 240 10% 4%;
+    /* MODO ESCURO - Fundo Dark Premium (levemente esverdeado/escuro) */
+    --background: 142 40% 4%; 
     --foreground: 0 0% 98%;
-    --primary: 147 20% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-    --border: 240 4% 16%;
-    --card: 240 10% 6%;
+    --card: 142 30% 6%;
     --card-foreground: 0 0% 98%;
+    --popover: 142 30% 6%;
+    --popover-foreground: 0 0% 98%;
+    
+    /* AS CORES DO SEU LOGO */
+    --primary: 142 71% 45%; /* Verde Vibrante para botões */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 93% 47%; /* Dourado para detalhes e badges */
+    --secondary-foreground: 140 50% 10%;
+    
+    --muted: 142 20% 12%;
+    --muted-foreground: 142 10% 60%;
+    --accent: 45 93% 47%; /* Dourado no Hover */
+    --accent-foreground: 140 50% 10%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 142 20% 12%;
+    --input: 142 20% 12%;
+    --ring: 142 71% 45%;
   }
 }
 

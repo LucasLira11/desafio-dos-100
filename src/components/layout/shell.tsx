@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Home, Target, History, BarChart2, User, Sparkles } from "lucide-react";
+import { Home, Target, History, Wallet, User } from "lucide-react"; // Removemos BarChart2, adicionamos Wallet
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { name: "Início", href: "/dashboard", icon: Home },
   { name: "Meu Desafio", href: "/challenge", icon: Target },
   { name: "Histórico", href: "/history", icon: History },
-  { name: "Análises", href: "/analytics", icon: BarChart2 },
+  { name: "Conta PIX", href: "/pix", icon: Wallet }, // <-- NOVA OPÇÃO DO PIX AQUI
   { name: "Perfil", href: "/settings/profile", icon: User },
 ];
 
@@ -20,9 +21,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen bg-background">
       {/* DESKTOP SIDEBAR */}
       <aside className="hidden md:flex w-64 flex-col border-r border-border bg-card px-4 py-6">
-        <div className="flex items-center gap-2 px-2 mb-8 text-primary">
-          <Sparkles className="h-6 w-6" />
-          <span className="font-bold text-lg text-foreground">Desafio dos 100</span>
+        <div className="flex items-center gap-3 px-2 mb-8">
+          {/* SEU LOGO AQUI NA SIDEBAR */}
+          <div className="relative h-8 w-8 shrink-0">
+            <Image 
+              src="/icon.png" 
+              alt="Logo Desafio dos 100" 
+              fill 
+              className="object-contain"
+            />
+          </div>
+          <span className="font-bold text-lg text-foreground tracking-tight">Desafio dos 100</span>
         </div>
         <nav className="flex flex-col gap-2">
           {NAV_ITEMS.map((item) => {
