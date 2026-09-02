@@ -7,33 +7,22 @@ interface ChallengeGridProps {
 }
 
 export function ChallengeGrid({ completedSteps }: ChallengeGridProps) {
-  // Cria um array de 1 a 100
-  const allSteps = Array.from({ length: 100 }, (_, i) => i + 1);
-
   return (
-    <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h3 className="font-semibold text-foreground">Mapa do Desafio</h3>
-          <p className="text-xs text-muted-foreground">Preencha todos os espaços para vencer.</p>
-        </div>
-        <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">
-          {completedSteps.length}/100
-        </div>
-      </div>
-
-      <div className="grid grid-cols-10 gap-1.5 sm:gap-2">
-        {allSteps.map((step) => {
+    <div className="bg-card border border-border p-4 sm:p-6 rounded-3xl shadow-sm">
+      {/* Grid com 5 colunas no celular e 10 no PC */}
+      <div className="grid grid-cols-5 md:grid-cols-10 gap-2 sm:gap-3 place-items-center">
+        {Array.from({ length: 100 }).map((_, i) => {
+          const step = i + 1;
           const isCompleted = completedSteps.includes(step);
-          
+
           return (
             <div
               key={step}
               className={cn(
-                "aspect-square flex items-center justify-center rounded-md text-[10px] sm:text-xs transition-all duration-500",
+                "flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border-2 text-sm transition-all duration-500",
                 isCompleted 
-                  ? "bg-primary text-primary-foreground font-bold shadow-sm scale-105" 
-                  : "bg-muted/30 text-muted-foreground/40 font-medium"
+                  ? "bg-primary border-primary text-primary-foreground font-black shadow-[0_0_15px_rgba(22,163,74,0.5)] scale-110 z-10" 
+                  : "bg-muted/10 border-border/50 text-muted-foreground/30 hover:border-primary/30"
               )}
             >
               {step}
