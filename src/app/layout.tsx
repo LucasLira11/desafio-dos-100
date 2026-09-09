@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "@/components/theme-provider";
 import "@/app/globals.css";
 
@@ -43,6 +44,12 @@ export default function RootLayout({
           forcedTheme="dark"
           disableTransitionOnChange
         >
+          <NextTopLoader
+            color="hsl(142 71% 45%)"
+            height={3}
+            shadow="0 0 10px hsl(142 71% 45%), 0 0 5px hsl(142 71% 45%)"
+            showSpinner={false}
+          />
           {children}
           <Toaster richColors position="top-center" />
         </ThemeProvider>

@@ -1,6 +1,11 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
+
+export async function revalidateProfileAction() {
+  revalidatePath("/settings/profile");
+}
 
 export async function saveSubscriptionAction(subscription: any) {
   const supabase = await createClient();

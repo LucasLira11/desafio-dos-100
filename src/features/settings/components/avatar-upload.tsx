@@ -6,6 +6,7 @@ import { Camera, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { revalidateProfileAction } from "@/features/settings/actions";
 
 export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUrl?: string | null }) {
   const [isUploading, setIsUploading] = useState(false);
@@ -33,6 +34,7 @@ export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUr
       if (updateError) throw updateError;
 
       toast.success("Foto de perfil atualizada!");
+      await revalidateProfileAction();
       router.refresh();
     } catch (error) {
       toast.error("Erro ao enviar a foto.");
@@ -43,7 +45,7 @@ export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUr
   };
 
   return (
-    <div className="relative h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary overflow-hidden group">
+    <div className="relative h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary overflow-hidden group transition-all duration-300 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.6)]">
       {currentUrl ? (
         <Image src={currentUrl} alt="Avatar" fill className="object-cover" />
       ) : (

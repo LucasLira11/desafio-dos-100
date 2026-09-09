@@ -11,14 +11,15 @@ export default async function OnboardingLayout({
 
   if (!user) redirect("/login");
 
-  // Verifica no banco se o usuário já está em um grupo
+  // Verifica no banco se o usuário já concluiu o setup (já está em um grupo).
+  // maybeSingle() evita erro/log quando o usuário ainda não tem grupo (novo cadastro).
   const { data: member } = await supabase
     .from("group_members")
     .select("group_id")
     .eq("profile_id", user.id)
-    .single();
+    .maybeSingle();
 
-  // Se já tem grupo (já escolheu sozinho ou casal), chuta pro dashboard
+  // Se já tem grupo, o onboarding já foi concluído antes: pula direto pro dashboard.
   if (member?.group_id) {
     redirect("/dashboard");
   }
