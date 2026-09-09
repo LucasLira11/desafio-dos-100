@@ -119,16 +119,16 @@ export default async function AnalyticsPage() {
   const averageDeposit = depositsCount > 0 ? totalSaved / depositsCount : 0;
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500">
+    <div className="p-6 sm:p-8 max-w-2xl mx-auto space-y-10">
       <header className="space-y-1 border-b border-border pb-6">
         <div className="flex items-center gap-2 text-primary mb-2">
-          <BarChart2 className="h-5 w-5" />
-          <span className="font-semibold text-sm tracking-widest uppercase">Inteligência</span>
+          <BarChart2 className="h-4 w-4" />
+          <span className="font-medium text-xs tracking-widest uppercase">Inteligência</span>
         </div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
           Análises
         </h1>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground text-sm mt-1">
           A matemática por trás das conquistas de vocês.
         </p>
       </header>
@@ -140,40 +140,40 @@ export default async function AnalyticsPage() {
 
       {/* Cards de Métricas */}
       <section className="grid grid-cols-2 gap-4">
-        <Card className="bg-muted/30 shadow-sm border-border">
-          <CardContent className="p-4 space-y-2">
-            <div className="bg-primary/10 w-fit p-2 rounded-md">
+        <Card className="rounded-2xl border-border bg-card">
+          <CardContent className="p-5 space-y-3">
+            <div className="bg-primary/10 w-fit p-2 rounded-lg">
               <TrendingUp className="h-4 w-4 text-primary" />
             </div>
             <div>
               <p className="text-xs font-medium text-muted-foreground">Progresso do Desafio</p>
-              <p className="text-xl font-bold text-foreground">
+              <p className="text-xl font-semibold text-foreground tracking-tight">
                 {((totalSaved / metaCasal) * 100).toFixed(1).replace('.0', '')}%
               </p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-muted/30 shadow-sm border-border">
-          <CardContent className="p-4 space-y-2">
-            <div className="bg-primary/10 w-fit p-2 rounded-md">
+        <Card className="rounded-2xl border-border bg-card">
+          <CardContent className="p-5 space-y-3">
+            <div className="bg-primary/10 w-fit p-2 rounded-lg">
               <Target className="h-4 w-4 text-primary" />
             </div>
             <div>
               <p className="text-xs font-medium text-muted-foreground">Média por Depósito</p>
-              <p className="text-xl font-bold text-foreground">{formatBRL(averageDeposit)}</p>
+              <p className="text-xl font-semibold text-foreground tracking-tight">{formatBRL(averageDeposit)}</p>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="col-span-2 shadow-sm border-border">
-          <CardContent className="p-4 flex items-center gap-4">
+        <Card className="col-span-2 rounded-2xl border-border bg-card">
+          <CardContent className="p-5 flex items-center gap-4">
             <div className="bg-muted p-3 rounded-full">
-              <Calendar className="h-6 w-6 text-foreground" />
+              <Calendar className="h-5 w-5 text-foreground" />
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Previsão de Conclusão</p>
-              <p className="text-lg font-bold text-foreground">{estimatedDateText}</p>
+              <p className="text-lg font-semibold text-foreground tracking-tight">{estimatedDateText}</p>
               {depositsCount >= 2 && depositsCount < totalDepositsNeeded && (
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Baseado no ritmo atual de vocês.

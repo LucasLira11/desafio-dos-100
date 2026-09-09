@@ -50,7 +50,7 @@ export function InviteCard() {
         </p>
 
         {errorMsg && (
-          <p className="text-sm text-red-500 font-medium bg-red-50 p-2 rounded-md">
+          <p className="text-sm text-red-500 font-medium bg-red-500/10 p-2 rounded-lg">
             {errorMsg}
           </p>
         )}

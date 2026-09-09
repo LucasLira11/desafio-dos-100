@@ -36,7 +36,7 @@ export default async function InvitePage({ params }: { params: any }) {
     return (
       <main className="flex min-h-screen items-center justify-center p-6 bg-background">
         <div className="text-center space-y-4 max-w-sm">
-          <h1 className="text-2xl font-bold text-foreground">Convite indisponível</h1>
+          <h1 className="text-2xl font-semibold text-foreground">Convite indisponível</h1>
           <p className="text-muted-foreground">Este link de convite já foi utilizado, expirou ou não existe.</p>
           <Button asChild className="mt-4"><Link href="/">Ir para o Início</Link></Button>
         </div>
@@ -52,7 +52,7 @@ export default async function InvitePage({ params }: { params: any }) {
             <Users className="h-8 w-8" strokeWidth={1.5} />
           </div>
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">
               Você recebeu um convite
             </h1>
             <p className="text-muted-foreground px-4">

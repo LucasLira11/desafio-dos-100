@@ -57,7 +57,7 @@ export default function OnboardingPage() {
               <Sparkles className="h-8 w-8" strokeWidth={1.5} />
             </div>
             <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              <h1 className="text-3xl font-semibold tracking-tight text-foreground">
                 Bem-vindo ao Desafio dos 100
               </h1>
               <p className="text-muted-foreground text-lg px-4">
@@ -74,7 +74,7 @@ export default function OnboardingPage() {
         {step === 2 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="space-y-2 text-center">
-              <h2 className="text-2xl font-bold tracking-tight text-foreground">Como você quer começar?</h2>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">Como você quer começar?</h2>
               <p className="text-muted-foreground text-sm">
                 Você pode convidar alguém depois se mudar de ideia.
               </p>
@@ -134,7 +134,7 @@ export default function OnboardingPage() {
               <div className="bg-secondary p-4 rounded-full text-secondary-foreground mb-2">
                 <Bell className="h-6 w-6" />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight text-foreground">Não perca o ritmo</h2>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">Não perca o ritmo</h2>
               {/* CORREÇÃO DO TAILWIND AQUI: max-w-70 em vez de max-w-[280px] */}
               <p className="text-muted-foreground text-sm max-w-70">
                 A consistência é o segredo. Quer receber um lembrete para não esquecer do depósito?

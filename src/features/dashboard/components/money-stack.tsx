@@ -24,23 +24,20 @@ export function MoneyStack({ current, total }: { current: number, total: number 
   );
 
   return (
-    <div className="flex flex-col items-center p-6 bg-card border border-border rounded-3xl shadow-lg relative overflow-hidden">
-      <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-6">A Pilha do Desafio</h3>
-      
+    <div className="flex flex-col items-center p-8 bg-card border border-border rounded-2xl">
+      <h3 className="text-xs font-medium uppercase tracking-widest text-muted-foreground mb-6">A Pilha do Desafio</h3>
+
       {/* Renderiza de baixo para cima (flex-col-reverse) */}
-      <div className="flex flex-col-reverse gap-1 w-32 relative z-10">
+      <div className="flex flex-col-reverse gap-1 w-32">
         {Array.from({ length: totalBundles }).map((_, i) => (
           <MoneyBundleIcon key={i} filled={i < filledBundles} />
         ))}
       </div>
 
-      <div className="mt-6 text-center z-10">
-        <p className="text-3xl font-black text-foreground">{current} <span className="text-lg font-medium text-muted-foreground">/ {total}</span></p>
-        <p className="text-sm text-primary font-semibold mt-1">Passos Concluídos</p>
+      <div className="mt-6 text-center">
+        <p className="text-3xl font-semibold text-foreground tracking-tight">{current} <span className="text-lg font-medium text-muted-foreground">/ {total}</span></p>
+        <p className="text-sm text-primary font-medium mt-1">Passos Concluídos</p>
       </div>
-
-      {/* Brilho de fundo */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary/10 blur-[60px] rounded-full pointer-events-none" />
     </div>
   );
 }

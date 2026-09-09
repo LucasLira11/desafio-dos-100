@@ -43,11 +43,11 @@ export function ProgressVessel({ percentage = 0 }: ProgressVesselProps) {
       `}</style>
 
       {/* Fio segurando a cápsula */}
-      <div className="absolute top-0 left-1/2 w-1 h-10 bg-border/50 -translate-x-1/2 z-0" />
+      <div className="absolute top-0 left-1/2 w-px h-10 bg-border -translate-x-1/2 z-0" />
 
-      {/* Cápsula de Vidro */}
-      <div className="relative w-56 h-56 rounded-full border-[6px] border-border/30 bg-background/40 backdrop-blur-md shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden flex items-center justify-center z-10">
-        
+      {/* Cápsula (base sólida, sem vidro) */}
+      <div className="relative w-56 h-56 rounded-full border border-border bg-card overflow-hidden flex items-center justify-center z-10">
+
         {/* Notas Caindo (Só aparecem se a cápsula não estiver 100% cheia) */}
         {percentage < 100 && (
           <div className="absolute inset-0 z-10 pointer-events-none">
@@ -57,24 +57,21 @@ export function ProgressVessel({ percentage = 0 }: ProgressVesselProps) {
           </div>
         )}
 
-        {/* Líquido Subindo */}
-        <div 
-          className="absolute bottom-0 left-0 right-0 bg-primary/60 backdrop-blur-lg transition-all duration-1000 ease-out z-20 border-t border-primary/40 shadow-[0_-10px_20px_rgba(22,163,74,0.3)]"
+        {/* Preenchimento Subindo */}
+        <div
+          className="absolute bottom-0 left-0 right-0 bg-primary transition-all duration-1000 ease-out z-20 border-t border-primary/40"
           style={{ height: `${percentage}%` }}
         />
 
         {/* Textos no Centro */}
-        <div className="relative z-30 text-center drop-shadow-xl flex flex-col items-center">
-          <p className="text-4xl font-black text-white">
+        <div className="relative z-30 text-center flex flex-col items-center">
+          <p className="text-4xl font-semibold text-white tracking-tight">
             {percentage.toFixed(0)}%
           </p>
-          <p className="text-xs font-bold text-white/80 uppercase tracking-widest mt-1">
+          <p className="text-xs font-medium text-white/70 uppercase tracking-widest mt-1">
             Concluído
           </p>
         </div>
-
-        {/* Brilho de Reflexo do Vidro */}
-        <div className="absolute top-4 left-6 w-16 h-8 bg-white/10 rounded-full rotate-[-30deg] z-40 blur-[2px]" />
       </div>
     </div>
   );

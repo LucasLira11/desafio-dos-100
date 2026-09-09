@@ -20,8 +20,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-border bg-card/80 backdrop-blur-xl px-4 py-6">
-        <div className="flex items-center gap-3 px-2 mb-8">
+      <aside className="hidden md:flex w-64 flex-col border-r border-zinc-800 bg-zinc-900 px-4 py-8">
+        <div className="flex items-center gap-3 px-2 mb-10">
           <div className="relative h-8 w-8 shrink-0">
             <Image
               src="/icon.png"
@@ -30,9 +30,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               className="object-contain"
             />
           </div>
-          <span className="font-bold text-lg text-foreground tracking-tight">Desafio dos 100</span>
+          <span className="font-semibold text-lg text-foreground tracking-tight">Desafio dos 100</span>
         </div>
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
@@ -41,14 +41,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 href={item.href}
                 prefetch={true}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-3 rounded-2xl text-sm font-medium",
-                  "transition-all duration-300 active:scale-95",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium",
+                  "transition-colors duration-200",
                   isActive
-                    ? "bg-primary/10 text-primary shadow-[0_0_20px_-6px_hsl(var(--primary)/0.7)]"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-muted text-primary"
+                    : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                 )}
               >
-                <item.icon className="h-5 w-5" />
+                <item.icon className="h-4.5 w-4.5" />
                 {item.name}
               </Link>
             );
@@ -63,8 +63,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* MOBILE BOTTOM NAV COM SUPORTE A SAFE AREA */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-card/70 backdrop-blur-xl z-50 flex justify-around p-2 rounded-t-3xl shadow-[0_-4px_30px_-10px_rgba(0,0,0,0.3)]"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 12px)' }}
+        className="md:hidden fixed bottom-0 left-0 right-0 border-t border-zinc-800 bg-zinc-900 z-50 flex justify-around px-2 py-2 shadow-[0_-1px_0_0_rgba(255,255,255,0.04)]"
+        style={{ paddingBottom: 'env(safe-area-inset-bottom, 10px)' }}
       >
         {NAV_ITEMS.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -74,14 +74,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               href={item.href}
               prefetch={true}
               className={cn(
-                "flex flex-col items-center gap-1 p-2 min-w-16 rounded-2xl",
-                "transition-all duration-300 active:scale-90",
-                isActive
-                  ? "text-primary bg-primary/10 shadow-[0_0_16px_-4px_hsl(var(--primary)/0.6)]"
-                  : "text-muted-foreground hover:text-foreground"
+                "flex flex-col items-center gap-1 p-2 min-w-16 rounded-xl",
+                "transition-colors duration-200 active:scale-95",
+                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <item.icon className={cn("h-5 w-5 transition-transform duration-300", isActive && "scale-110")} />
+              <item.icon className="h-5 w-5" />
               <span className="text-[10px] font-medium">{item.name}</span>
             </Link>
           );

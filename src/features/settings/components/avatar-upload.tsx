@@ -7,8 +7,15 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { revalidateProfileAction } from "@/features/settings/actions";
+import { withAlpha } from "@/lib/user-color";
 
-export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUrl?: string | null }) {
+interface AvatarUploadProps {
+  userId: string;
+  currentUrl?: string | null;
+  ringColor?: string;
+}
+
+export function AvatarUpload({ userId, currentUrl, ringColor }: AvatarUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
@@ -45,11 +52,17 @@ export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUr
   };
 
   return (
-    <div className="relative h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary overflow-hidden group transition-all duration-300 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.6)]">
+    <div
+      className="relative h-16 w-16 rounded-full flex items-center justify-center border-2 overflow-hidden group"
+      style={{
+        borderColor: ringColor || "hsl(var(--primary))",
+        backgroundColor: ringColor ? withAlpha(ringColor, "1A") : "hsl(var(--primary) / 0.1)",
+      }}
+    >
       {currentUrl ? (
         <Image src={currentUrl} alt="Avatar" fill className="object-cover" />
       ) : (
-        <UserPlaceholder />
+        <UserPlaceholder color={ringColor} />
       )}
       
       {/* Botão invisível de upload por cima da foto */}
@@ -61,8 +74,13 @@ export function AvatarUpload({ userId, currentUrl }: { userId: string, currentUr
   );
 }
 
-const UserPlaceholder = () => (
-  <svg className="h-8 w-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+const UserPlaceholder = ({ color }: { color?: string }) => (
+  <svg
+    className="h-8 w-8"
+    style={{ color: color || "hsl(var(--primary))" }}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+  >
     <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
   </svg>
 );

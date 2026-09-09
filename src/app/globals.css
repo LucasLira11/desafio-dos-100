@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @layer base {
   :root {
@@ -29,29 +30,30 @@
   }
 
   .dark {
-    /* MODO ESCURO - Fundo Dark Premium (levemente esverdeado/escuro) */
-    --background: 142 40% 4%; 
-    --foreground: 0 0% 98%;
-    --card: 142 30% 6%;
-    --card-foreground: 0 0% 98%;
-    --popover: 142 30% 6%;
-    --popover-foreground: 0 0% 98%;
-    
-    /* AS CORES DO SEU LOGO */
-    --primary: 142 71% 45%; /* Verde Vibrante para botões */
+    /* MODO ESCURO - Minimalismo Financeiro Premium: base monocromática
+       (escala zinc) com verde e dourado usados apenas como cor de sotaque. */
+    --background: 240 10% 3.9%;  /* zinc-950 sólido */
+    --foreground: 240 5% 96%;    /* quase branco, alto contraste para números */
+    --card: 240 6% 13%;          /* zinc-900, sólido e com contraste claro contra o fundo */
+    --card-foreground: 240 5% 96%;
+    --popover: 240 6% 13%;
+    --popover-foreground: 240 5% 96%;
+
+    /* Cor de sotaque: usar apenas em ações primárias, ícones e estados ativos */
+    --primary: 152 30% 42%;      /* verde dinheiro desaturado, sem brilho neon */
     --primary-foreground: 0 0% 100%;
-    --secondary: 45 93% 47%; /* Dourado para detalhes e badges */
-    --secondary-foreground: 140 50% 10%;
-    
-    --muted: 142 20% 12%;
-    --muted-foreground: 142 10% 60%;
-    --accent: 45 93% 47%; /* Dourado no Hover */
-    --accent-foreground: 140 50% 10%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 142 20% 12%;
-    --input: 142 20% 12%;
-    --ring: 142 71% 45%;
+    --secondary: 40 30% 55%;     /* dourado champagne, sofisticado, não saturado */
+    --secondary-foreground: 240 10% 9%;
+
+    --muted: 240 4% 15%;         /* zinc-800 */
+    --muted-foreground: 240 4% 55%; /* zinc-500, texto secundário bem rebaixado */
+    --accent: 240 4% 15%;
+    --accent-foreground: 240 5% 96%;
+    --destructive: 0 45% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 4% 16%;        /* separador sutil, equivalente a zinc-800 */
+    --input: 240 4% 16%;
+    --ring: 152 30% 42%;
   }
 }
 

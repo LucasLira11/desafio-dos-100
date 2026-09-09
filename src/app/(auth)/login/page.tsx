@@ -37,7 +37,7 @@ export default function LoginPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
             <Sparkles className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Bem-vindo de volta</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Bem-vindo de volta</h1>
           <p className="text-sm text-muted-foreground">Faça login para continuar seu desafio.</p>
         </div>
 
@@ -45,7 +45,7 @@ export default function LoginPage() {
           <CardContent className="pt-6">
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {serverError && (
-                <div className="p-3 text-sm text-red-700 bg-red-50 rounded-md border border-red-100">
+                <div className="p-3 text-sm text-red-500 bg-red-500/10 rounded-lg border border-red-500/20">
                   {serverError}
                 </div>
               )}

@@ -48,7 +48,10 @@ export function DepositButton({ amount, stepNumber }: DepositButtonProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-full px-6 gap-2 shadow-sm">
+        <Button
+          size="sm"
+          className="rounded-full px-4 sm:px-5 gap-1.5 shadow-sm active:scale-95 transition-transform duration-300"
+        >
           Depositar
           <ArrowRight className="h-4 w-4" />
         </Button>
@@ -62,7 +65,7 @@ export function DepositButton({ amount, stepNumber }: DepositButtonProps) {
         <div className="space-y-6 py-4 text-center">
           <div className="bg-primary/5 p-6 rounded-2xl border border-primary/10 inline-block">
             <p className="text-sm font-medium text-primary mb-1">Depósito #{stepNumber}</p>
-            <p className="text-4xl font-bold text-foreground">{formatBRL(amount)}</p>
+            <p className="text-4xl font-semibold text-foreground tracking-tight">{formatBRL(amount)}</p>
           </div>
           
           <p className="text-muted-foreground text-sm max-w-70 mx-auto">

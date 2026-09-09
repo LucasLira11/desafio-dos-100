@@ -25,25 +25,25 @@ export default async function ProfilePage() {
     .maybeSingle();
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500 pb-24">
-      
+    <div className="p-6 sm:p-8 max-w-2xl mx-auto space-y-10 pb-24">
+
       <header className="space-y-1 border-b border-border pb-6">
         <div className="flex items-center gap-2 text-primary mb-2">
-          <Settings className="h-5 w-5" />
-          <span className="font-semibold text-sm tracking-widest uppercase">Configurações</span>
+          <Settings className="h-4 w-4" />
+          <span className="font-medium text-xs tracking-widest uppercase">Configurações</span>
         </div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">
+        <h1 className="text-3xl font-semibold text-foreground tracking-tight">
           Meu Perfil
         </h1>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground text-sm mt-1">
           Gerencie sua conta e preferências.
         </p>
       </header>
 
       <section className="space-y-8">
-        
+
         {/* CARTÃO DE PERFIL COM A FOTO */}
-        <Card className="rounded-3xl shadow-sm border-border bg-card/70 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_-10px_hsl(var(--primary)/0.5)]">
+        <Card className="rounded-2xl border-border bg-card">
           <CardContent className="p-6">
             <div className="flex items-center gap-5">
 
@@ -53,7 +53,7 @@ export default async function ProfilePage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-xl font-bold text-foreground truncate">
+                <p className="text-xl font-semibold text-foreground tracking-tight truncate">
                   {profile?.full_name || "Usuário"}
                 </p>
                 <p className="text-sm text-muted-foreground truncate">
@@ -67,7 +67,7 @@ export default async function ProfilePage() {
 
         {/* NOTIFICAÇÕES */}
         <section className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground px-1 uppercase tracking-wider">
+          <h3 className="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">
             Notificações
           </h3>
           <PushButton />
@@ -77,13 +77,13 @@ export default async function ProfilePage() {
         <form action={logoutAction} className="pt-4">
           <Button
             variant="outline"
-            className="w-full rounded-3xl h-14 text-md font-bold shadow-sm hover:-translate-y-1 active:scale-95 transition-all duration-300 text-red-500 border-red-500/50 hover:bg-red-500/10 hover:text-red-500"
+            className="w-full rounded-xl h-14 text-sm font-semibold active:scale-95 transition-transform duration-200 text-red-500 border-red-500/30 hover:bg-red-500/10 hover:text-red-500"
           >
             <LogOut className="mr-2 h-5 w-5" />
             Sair do Aplicativo
           </Button>
         </form>
-        
+
       </section>
     </div>
   );
