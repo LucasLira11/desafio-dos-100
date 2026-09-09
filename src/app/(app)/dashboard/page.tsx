@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import { InviteCard } from "@/features/couples/components/invite-card";
 import { ProgressVessel } from "@/features/dashboard/components/progress-vessel";
-import { DepositButton } from "@/features/dashboard/components/deposit-button";
+import { DepositForm } from "@/features/deposits/components/deposit-form";
 import { AvatarUpload } from "@/features/settings/components/avatar-upload"; // <-- Importamos o botão de foto
 import { getUserColor } from "@/lib/user-color";
 import {
@@ -67,6 +67,17 @@ export default async function DashboardPage() {
     1
   );
 
+  // Chave PIX também isolada em query própria: é onde o próprio depósito
+  // será "recebido" (a conta separada do desafio), então usamos a chave do
+  // usuário logado, não a do parceiro.
+  const { data: myPixProfile } = await supabase
+    .from("profiles")
+    .select("pix_key")
+    .eq("id", user!.id)
+    .maybeSingle();
+
+  const myPixKey = myPixProfile?.pix_key || null;
+
   const { data: challenges } = await supabase
     .from("user_challenges")
     .select("id, profile_id")
@@ -96,8 +107,10 @@ export default async function DashboardPage() {
 
   const myCompletedSteps = myDeposits.map(d => d.step_number);
   
-  const myNextStep = getNextDeposit(myCompletedSteps); 
-  const myNextAmount = myNextStep; 
+  const myNextStep = getNextDeposit(myCompletedSteps);
+  const myNextAmount = myNextStep;
+  const remainingSteps = 100 - myCompletedSteps.length;
+  const maxQuantity = Math.min(10, remainingSteps);
 
   const hour = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo", hour: "numeric" });
   const hourNum = parseInt(hour);
@@ -170,7 +183,12 @@ export default async function DashboardPage() {
             
             {/* O Botão (ocupa largura toda no mobile, e se ajusta no PC) */}
             <div className="w-full sm:w-auto shrink-0">
-              <DepositButton amount={myNextAmount!} stepNumber={myNextStep} />
+              <DepositForm
+                nextStep={myNextStep}
+                maxQuantity={maxQuantity}
+                pixKey={myPixKey}
+                recipientName={myProfile?.full_name || "Recebedor"}
+              />
             </div>
           </div>
         ) : (

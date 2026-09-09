@@ -1,354 +1,223 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { registerDepositAction } from "@/features/deposits/actions";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { QRCodeSVG } from "qrcode.react";
 import { toast } from "sonner";
+import { ArrowRight, Check, Copy, Loader2, Minus, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
-  Check,
-  Loader2,
-  PiggyBank,
-  ShieldCheck,
-  Sparkles,
-  X,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { registerDepositAction } from "@/features/deposits/actions";
+import { generatePixPayload } from "@/lib/pix";
 
-interface DepositButtonProps {
-  amount: number;
-  stepNumber: number;
+interface DepositFormProps {
+  nextStep: number;
+  maxQuantity: number;
+  pixKey: string | null;
+  recipientName: string;
+  city?: string;
 }
 
-export function DepositButton({
-  amount,
-  stepNumber,
-}: DepositButtonProps) {
+const formatBRL = (value: number) =>
+  value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+export function DepositForm({ nextStep, maxQuantity, pixKey, recipientName, city = "SAO PAULO" }: DepositFormProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [phase, setPhase] = useState<"select" | "payment">("select");
+  const [quantity, setQuantity] = useState(1);
+  const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
 
-  const formatBRL = (value: number) =>
-    value.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
+  // Passos escolhidos: [nextStep, nextStep + 1, ..., nextStep + quantity - 1]
+  const steps = useMemo(
+    () => Array.from({ length: quantity }, (_, i) => {
+      const step_number = nextStep + i;
+      return { step_number, amount: step_number };
+    }),
+    [nextStep, quantity]
+  );
+
+  const total = steps.reduce((sum, step) => sum + step.amount, 0);
+  const lastStep = nextStep + quantity - 1;
+
+  const pixPayload = useMemo(() => {
+    if (!pixKey) return null;
+    return generatePixPayload({
+      key: pixKey,
+      name: recipientName,
+      city,
+      amount: total,
+      txId: `DESAFIO${nextStep}`,
     });
+  }, [pixKey, recipientName, city, total, nextStep]);
 
-  const progress = Math.min((stepNumber / 100) * 100, 100);
-  const remainingSteps = Math.max(100 - stepNumber, 0);
-
-  const closeModal = () => {
-    if (isSubmitting) return;
-    setShowModal(false);
+  const reset = () => {
+    setPhase("select");
+    setQuantity(1);
+    setCopied(false);
   };
 
-  const handleDeposit = async () => {
-    if (isSubmitting) return;
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) reset();
+  };
 
-    try {
-      setIsSubmitting(true);
+  const handleCopy = async () => {
+    if (!pixPayload) return;
+    await navigator.clipboard.writeText(pixPayload);
+    setCopied(true);
+    toast.success("Código PIX copiado!");
+  };
 
-      const result = await registerDepositAction(amount, stepNumber);
+  const handleConfirm = async () => {
+    setIsSubmitting(true);
+    const result = await registerDepositAction(steps);
+    setIsSubmitting(false);
 
-      if (result?.success) {
-        toast.success("Depósito registrado!", {
-          description: `${formatBRL(amount)} foram adicionados ao seu desafio.`,
-        });
-
-        setShowModal(false);
-        return;
-      }
-
-      toast.error("Não foi possível registrar", {
-        description:
-          result?.error ||
-          "Ocorreu um erro ao registrar seu depósito. Tente novamente.",
-      });
-    } catch (error) {
-      console.error(error);
-
-      toast.error("Algo deu errado", {
-        description:
-          "Não conseguimos registrar o depósito. Tente novamente.",
-      });
-    } finally {
-      setIsSubmitting(false);
+    if (result?.error) {
+      toast.error(result.error);
+      return;
     }
+
+    toast.success(
+      steps.length > 1
+        ? `${steps.length} passos registrados! ${formatBRL(total)} adicionados.`
+        : `${formatBRL(total)} adicionados ao desafio.`
+    );
+    setIsOpen(false);
+    reset();
+    router.refresh();
   };
-
-  // Fecha com ESC
-  useEffect(() => {
-    if (!showModal) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !isSubmitting) {
-        setShowModal(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [showModal, isSubmitting]);
-
-  // Evita scroll da página enquanto o modal está aberto
-  useEffect(() => {
-    if (!showModal) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [showModal]);
 
   return (
-    <>
-      {/* BOTÃO PRINCIPAL */}
-      <Button
-        type="button"
-        onClick={() => setShowModal(true)}
-        disabled={isSubmitting}
-        className={cn(
-          "group relative h-14 w-full overflow-hidden rounded-2xl",
-          "bg-primary text-base font-bold text-primary-foreground",
-          "shadow-[0_10px_30px_-12px_hsl(var(--primary)/0.65)]",
-          "transition-all duration-300",
-          "hover:-translate-y-0.5 hover:bg-primary/95",
-          "hover:shadow-[0_16px_40px_-14px_hsl(var(--primary)/0.7)]",
-          "active:translate-y-0"
-        )}
-      >
-        <span className="relative z-10 flex items-center justify-center gap-2">
-          <PiggyBank className="h-5 w-5" />
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button className="h-11 rounded-full px-5 gap-1.5 active:scale-95 transition-transform duration-200">
+          Depositar
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
 
-          Guardar {formatBRL(amount)}
+      <DialogContent className="sm:max-w-sm">
+        {phase === "select" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle>Novo depósito</DialogTitle>
+            </DialogHeader>
 
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </span>
-
-        <span className="absolute inset-0 translate-y-full bg-white/10 transition-transform duration-300 group-hover:translate-y-0" />
-      </Button>
-
-      {/* MODAL */}
-      {showModal && (
-        <div
-          className={cn(
-            "fixed inset-0 z-[100]",
-            "flex items-center justify-center p-4 sm:p-6",
-            "bg-black/50 backdrop-blur-md",
-            "animate-in fade-in duration-200"
-          )}
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closeModal();
-            }
-          }}
-        >
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="deposit-modal-title"
-            className={cn(
-              "relative w-full max-w-[430px] overflow-hidden",
-              "rounded-[32px] border border-border/60",
-              "bg-card",
-              "shadow-[0_32px_100px_-20px_rgba(0,0,0,0.45)]",
-              "animate-in zoom-in-95 slide-in-from-bottom-4",
-              "duration-300"
-            )}
-          >
-            {/* Glow superior */}
-            <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl" />
-
-            {/* BOTÃO FECHAR */}
-            <button
-              type="button"
-              onClick={closeModal}
-              disabled={isSubmitting}
-              aria-label="Fechar"
-              className={cn(
-                "absolute right-5 top-5 z-20",
-                "flex h-9 w-9 items-center justify-center rounded-full",
-                "border border-border/60 bg-background/70",
-                "text-muted-foreground backdrop-blur-md",
-                "transition-all duration-200",
-                "hover:scale-105 hover:bg-muted hover:text-foreground",
-                "disabled:pointer-events-none disabled:opacity-40"
-              )}
-            >
-              <X className="h-4 w-4" />
-            </button>
-
-            <div className="relative p-6 sm:p-7">
-              {/* BADGE */}
-              <div className="mb-6 flex justify-center">
-                <div
-                  className={cn(
-                    "flex items-center gap-2 rounded-full",
-                    "border border-primary/15 bg-primary/5",
-                    "px-3 py-1.5",
-                    "text-xs font-bold text-primary"
-                  )}
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  DESAFIO DOS 100
-                </div>
+            <div className="space-y-6 pt-2">
+              <div className="text-center space-y-1">
+                <p className="text-xs uppercase tracking-widest text-zinc-500">Você vai guardar</p>
+                <p className="text-4xl font-semibold text-white tracking-tight">{formatBRL(total)}</p>
+                <p className="text-xs text-zinc-500">
+                  {quantity > 1 ? `Passos ${nextStep} a ${lastStep}` : `Passo ${nextStep}`}
+                </p>
               </div>
 
-              {/* ÍCONE */}
-              <div className="mb-5 flex justify-center">
-                <div className="relative">
-                  <div className="absolute inset-0 scale-125 rounded-full bg-primary/10 blur-xl" />
-
-                  <div
-                    className={cn(
-                      "relative flex h-[88px] w-[88px]",
-                      "items-center justify-center rounded-[28px]",
-                      "border border-primary/15",
-                      "bg-gradient-to-br from-primary/15 to-primary/5",
-                      "text-primary",
-                      "shadow-sm"
-                    )}
+              <div className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+                <div>
+                  <p className="text-sm font-medium text-white">Quantos passos?</p>
+                  <p className="text-xs text-zinc-500">Até {maxQuantity} de uma vez</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    disabled={quantity <= 1}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-800 text-white transition-colors hover:bg-zinc-900 disabled:opacity-30"
                   >
-                    <PiggyBank
-                      className="h-10 w-10"
-                      strokeWidth={1.8}
-                    />
-
-                    <div className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border-4 border-card bg-primary text-primary-foreground">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                    </div>
-                  </div>
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="w-6 text-center text-lg font-semibold text-white tabular-nums">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
+                    disabled={quantity >= maxQuantity}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-800 text-white transition-colors hover:bg-zinc-900 disabled:opacity-30"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
 
-              {/* TEXTO */}
-              <div className="text-center">
-                <p className="mb-1 text-sm font-medium text-muted-foreground">
-                  Você vai guardar
-                </p>
-
-                <h2
-                  id="deposit-modal-title"
-                  className="text-4xl font-black tracking-tight text-foreground sm:text-[42px]"
-                >
-                  {formatBRL(amount)}
-                </h2>
-
-                <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-muted-foreground">
-                  Confirme o depósito para marcar mais uma etapa da sua
-                  jornada como concluída.
-                </p>
-              </div>
-
-              {/* CARD DO PASSO */}
-              <div
-                className={cn(
-                  "mt-7 rounded-2xl border border-border/60",
-                  "bg-muted/30 p-4"
-                )}
+              <Button
+                className="w-full h-12 rounded-2xl"
+                onClick={() => setPhase("payment")}
+                disabled={!pixKey}
               >
-                <div className="mb-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                      Progresso
-                    </p>
+                Gerar pagamento
+              </Button>
 
-                    <p className="mt-0.5 text-sm font-bold text-foreground">
-                      Passo {stepNumber} de 100
-                    </p>
-                  </div>
-
-                  <div className="rounded-xl bg-primary/10 px-3 py-1.5 text-sm font-black text-primary">
-                    {Math.round(progress)}%
-                  </div>
-                </div>
-
-                {/* Barra */}
-                <div className="h-2 overflow-hidden rounded-full bg-muted">
-                  <div
-                    className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
-                    style={{
-                      width: `${progress}%`,
-                    }}
-                  />
-                </div>
-
-                <p className="mt-3 text-xs text-muted-foreground">
-                  {remainingSteps > 0 ? (
-                    <>
-                      Depois deste depósito, você estará cada vez mais perto
-                      da meta.
-                    </>
-                  ) : (
-                    <>Última etapa do desafio.</>
-                  )}
+              {!pixKey && (
+                <p className="text-center text-xs text-zinc-500">
+                  Configure sua chave PIX em{" "}
+                  <a href="/pix" className="text-primary underline underline-offset-2">
+                    Conta PIX
+                  </a>{" "}
+                  antes de gerar o pagamento.
                 </p>
-              </div>
-
-              {/* INFO SEGURANÇA */}
-              <div className="mt-4 flex items-start gap-3 rounded-2xl bg-muted/20 px-4 py-3">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-
-                <p className="text-xs leading-5 text-muted-foreground">
-                  Confirme apenas depois de realizar o depósito. Essa ação
-                  registra esta etapa como concluída.
-                </p>
-              </div>
-
-              {/* AÇÕES */}
-              <div className="mt-6 grid grid-cols-[0.8fr_1.2fr] gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={closeModal}
-                  disabled={isSubmitting}
-                  className={cn(
-                    "h-14 rounded-2xl",
-                    "border-border/70",
-                    "font-bold",
-                    "transition-all",
-                    "hover:bg-muted/60"
-                  )}
-                >
-                  Cancelar
-                </Button>
-
-                <Button
-                  type="button"
-                  onClick={handleDeposit}
-                  disabled={isSubmitting}
-                  className={cn(
-                    "group h-14 rounded-2xl",
-                    "bg-primary font-bold text-primary-foreground",
-                    "shadow-[0_10px_30px_-15px_hsl(var(--primary)/0.8)]",
-                    "transition-all duration-300",
-                    "hover:-translate-y-0.5 hover:bg-primary/95"
-                  )}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                      Registrando...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      Confirmar depósito
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  )}
-                </Button>
-              </div>
+              )}
             </div>
+          </>
+        ) : (
+          <>
+            <DialogHeader>
+              <DialogTitle>Pagar com PIX</DialogTitle>
+            </DialogHeader>
 
-            {/* linha inferior */}
-            <div className="h-1 w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
-          </div>
-        </div>
-      )}
-    </>
+            <div className="space-y-5 pt-2">
+              <div className="flex justify-center">
+                <div className="rounded-2xl border border-zinc-800 bg-white p-4">
+                  {pixPayload && <QRCodeSVG value={pixPayload} size={176} />}
+                </div>
+              </div>
+
+              <div className="text-center space-y-1">
+                <p className="text-2xl font-semibold text-white tracking-tight">{formatBRL(total)}</p>
+                <p className="text-xs text-zinc-500">
+                  {quantity > 1 ? `Passos ${nextStep} a ${lastStep}` : `Passo ${nextStep}`}
+                </p>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCopy}
+                className="w-full h-12 rounded-2xl gap-2 border-zinc-800"
+              >
+                {copied ? <Check className="h-4 w-4 text-primary" /> : <Copy className="h-4 w-4" />}
+                {copied ? "Código copiado" : "Copiar PIX Copia e Cola"}
+              </Button>
+
+              <Button
+                type="button"
+                onClick={handleConfirm}
+                disabled={!copied || isSubmitting}
+                className="w-full h-12 rounded-2xl"
+              >
+                {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirmar que já paguei"}
+              </Button>
+
+              <button
+                type="button"
+                onClick={() => setPhase("select")}
+                className="w-full text-center text-xs text-zinc-500 hover:text-white transition-colors"
+              >
+                Voltar
+              </button>
+            </div>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
