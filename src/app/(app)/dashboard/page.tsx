@@ -150,32 +150,39 @@ export default async function DashboardPage() {
       {/* PRÓXIMO DEPÓSITO */}
       <section>
         {myNextStep !== null ? (
-          <Card className="rounded-2xl border-border bg-card">
-            <CardContent className="p-5 sm:p-6 flex items-center gap-4">
-              <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+          <div className="rounded-3xl border border-zinc-800 bg-zinc-950 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="flex items-center gap-4">
+              {/* Ícone Minimalista */}
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 text-primary">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide truncate">Seu próximo passo</p>
-                <p className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight truncate">R$ {formatBRL(myNextAmount!)}</p>
+              
+              {/* Textos com min-w-0 para evitar bugs de quebra */}
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
+                  Próximo Passo
+                </p>
+                <p className="text-2xl font-semibold text-white">
+                  R$ {formatBRL(myNextAmount!)}
+                </p>
               </div>
-              <div className="shrink-0">
-                <DepositButton amount={myNextAmount!} stepNumber={myNextStep} />
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+            
+            {/* O Botão (ocupa largura toda no mobile, e se ajusta no PC) */}
+            <div className="w-full sm:w-auto shrink-0">
+              <DepositButton amount={myNextAmount!} stepNumber={myNextStep} />
+            </div>
+          </div>
         ) : (
-          <Card className="rounded-2xl border-border bg-card">
-            <CardContent className="p-8 flex flex-col items-center text-center gap-3">
-              <div className="bg-primary/10 p-3 rounded-full">
-                <Sparkles className="h-6 w-6 text-primary" />
-              </div>
-              <div>
-                <p className="text-lg font-semibold text-foreground">Você concluiu seus 100 depósitos!</p>
-                <p className="text-sm text-muted-foreground">Sua parte do desafio está completa.</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="rounded-3xl border border-primary/20 bg-primary/5 p-6 flex flex-col items-center text-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
+              <Sparkles className="h-6 w-6" />
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-white">Você concluiu seus 100 depósitos!</p>
+              <p className="text-sm text-zinc-400">Sua parte do desafio está completa. 🎉</p>
+            </div>
+          </div>
         )}
       </section>
 
