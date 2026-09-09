@@ -9,6 +9,7 @@ import { Sparkles, Loader2 } from "lucide-react";
 
 import { registerSchema } from "@/features/auth/schema";
 import { registerAction } from "@/features/auth/actions";
+import { ColorPicker } from "@/features/auth/components/color-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,10 +17,10 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function RegisterPage() {
   const [serverError, setServerError] = useState<string | null>(null);
-  
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: { name: "", email: "", password: "", color: "" },
   });
 
   const onSubmit = async (values: z.infer<typeof registerSchema>) => {
@@ -37,7 +38,7 @@ export default function RegisterPage() {
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
             <Sparkles className="h-6 w-6" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Criar conta</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Criar conta</h1>
           <p className="text-sm text-muted-foreground">O primeiro passo da conquista de vocês.</p>
         </div>
 
@@ -45,7 +46,7 @@ export default function RegisterPage() {
           <CardContent className="pt-6">
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               {serverError && (
-                <div className="p-3 text-sm text-red-700 bg-red-50 rounded-md border border-red-100">
+                <div className="p-3 text-sm text-red-500 bg-red-500/10 rounded-lg border border-red-500/20">
                   {serverError}
                 </div>
               )}
@@ -88,6 +89,11 @@ export default function RegisterPage() {
                   <p className="text-xs text-red-500">{form.formState.errors.password.message}</p>
                 )}
               </div>
+
+              <ColorPicker
+                value={form.watch("color")}
+                onChange={(value) => form.setValue("color", value)}
+              />
 
               <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Criar minha conta"}

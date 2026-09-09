@@ -38,6 +38,7 @@ export async function registerAction(values: z.infer<typeof registerSchema>) {
     const { error: profileError } = await supabase.from("profiles").insert({
       id: data.user.id,
       full_name: values.name,
+      color: values.color || null,
     });
 
     if (profileError) {
