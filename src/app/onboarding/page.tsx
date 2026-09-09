@@ -132,41 +132,44 @@ export default function OnboardingPage() {
         {step === 3 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="space-y-2 text-center flex flex-col items-center">
-              <div className="bg-secondary p-4 rounded-full text-secondary-foreground mb-2">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-2">
                 <Bell className="h-6 w-6" />
               </div>
               <h2 className="text-2xl font-semibold tracking-tight text-foreground">Não perca o ritmo</h2>
               {/* CORREÇÃO DO TAILWIND AQUI: max-w-70 em vez de max-w-[280px] */}
               <p className="text-muted-foreground text-sm max-w-70">
-                A consistência é o segredo. Quer receber um lembrete para não esquecer do depósito?
+                A consistência é o segredo. Ative os lembretes para não esquecer do seu depósito.
               </p>
             </div>
 
-            <Card className="p-5 space-y-6">
-              <div className="flex items-center justify-between">
+            <Card className="p-6 space-y-6">
+              <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h3 className="font-medium text-foreground">Ativar lembretes</h3>
-                  <p className="text-sm text-muted-foreground">Notificações diárias.</p>
+                  <h3 className="font-medium text-foreground">Lembretes diários</h3>
+                  <p className="text-sm text-muted-foreground">Um aviso no horário que você escolher.</p>
                 </div>
-                <button 
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={remindersActive}
                   onClick={() => setRemindersActive(!remindersActive)}
                   className={cn(
-                    "w-11 h-6 rounded-full transition-colors relative",
-                    remindersActive ? "bg-primary" : "bg-muted"
+                    "w-12 h-7 rounded-full transition-colors relative shrink-0 border",
+                    remindersActive ? "bg-primary border-primary" : "bg-zinc-800 border-zinc-700"
                   )}
                 >
                   <div className={cn(
-                    "absolute top-1 w-4 h-4 bg-white rounded-full transition-all",
+                    "absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-all",
                     remindersActive ? "left-6" : "left-1"
                   )} />
                 </button>
               </div>
 
               {remindersActive && (
-                <div className="flex items-center justify-between animate-in fade-in duration-300 border-t pt-4">
+                <div className="flex items-center justify-between animate-in fade-in duration-300 border-t border-border pt-4">
                   <h3 className="font-medium text-foreground">Horário</h3>
-                  <input 
-                    type="time" 
+                  <input
+                    type="time"
                     value={reminderTime}
                     onChange={(e) => setReminderTime(e.target.value)}
                     className="bg-transparent border border-border rounded-md px-3 py-1 text-sm outline-none focus:border-primary text-foreground"

@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/features/auth/actions";
 import { PushButton } from "@/features/settings/components/push-button";
 import { AvatarUpload } from "@/features/settings/components/avatar-upload"; // <-- Importando o componente da foto
+import { ProfileColorPicker } from "@/features/settings/components/profile-color-picker";
+import { InstallAppGuide } from "@/features/settings/components/install-app-guide";
+import { getUserColor } from "@/lib/user-color";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +26,17 @@ export default async function ProfilePage() {
     .select("full_name, avatar_url")
     .eq("id", user.id)
     .maybeSingle();
+
+  // Cor de identificação isolada em query própria: se a coluna "color" ainda
+  // não existir no banco (migração pendente), essa busca falha sozinha sem
+  // derrubar foto/nome acima.
+  const { data: colorProfile } = await supabase
+    .from("profiles")
+    .select("color")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const myColor = getUserColor(colorProfile?.color, 0);
 
   return (
     <div className="p-6 sm:p-8 max-w-2xl mx-auto space-y-10 pb-24">
@@ -49,7 +63,7 @@ export default async function ProfilePage() {
 
               <div className="shrink-0">
                 {/* Aqui está o botão de trocar a foto! */}
-                <AvatarUpload userId={user.id} currentUrl={profile?.avatar_url} />
+                <AvatarUpload userId={user.id} currentUrl={profile?.avatar_url} ringColor={myColor} />
               </div>
 
               <div className="flex-1 min-w-0">
@@ -65,12 +79,28 @@ export default async function ProfilePage() {
           </CardContent>
         </Card>
 
+        {/* COR DE IDENTIFICAÇÃO */}
+        <section className="space-y-3">
+          <h3 className="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">
+            Identidade
+          </h3>
+          <ProfileColorPicker initialColor={colorProfile?.color || ""} />
+        </section>
+
         {/* NOTIFICAÇÕES */}
         <section className="space-y-3">
           <h3 className="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">
             Notificações
           </h3>
           <PushButton />
+        </section>
+
+        {/* INSTALAR COMO APP */}
+        <section className="space-y-3">
+          <h3 className="text-xs font-medium text-muted-foreground px-1 uppercase tracking-wider">
+            Aplicativo
+          </h3>
+          <InstallAppGuide />
         </section>
 
         {/* BOTÃO DE SAÍDA */}
