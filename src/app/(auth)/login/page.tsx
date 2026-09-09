@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
-import { Sparkles, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Loader2 } from "lucide-react";
 
 import { loginSchema } from "@/features/auth/schema";
 import { loginAction } from "@/features/auth/actions";
@@ -33,9 +34,9 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-background">
       <div className="w-full max-w-sm space-y-6">
-        <div className="flex flex-col items-center text-center gap-2">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md">
-            <Sparkles className="h-6 w-6" />
+        <div className="flex flex-col items-center text-center gap-3">
+          <div className="relative h-14 w-14">
+            <Image src="/icon.png" alt="Desafio dos 100" fill className="object-contain" priority />
           </div>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Bem-vindo de volta</h1>
           <p className="text-sm text-muted-foreground">Faça login para continuar seu desafio.</p>

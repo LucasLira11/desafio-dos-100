@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   title: "Desafio dos 100",
   description: "Pequenos passos. Grandes planos.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

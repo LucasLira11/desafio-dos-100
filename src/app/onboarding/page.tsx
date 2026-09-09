@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, ArrowRight, User, Users, Bell, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, User, Users, Bell, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { setupAccountAction, savePreferencesAction } from "@/features/onboarding/actions";
@@ -53,8 +54,8 @@ export default function OnboardingPage() {
       <div className="w-full max-w-md">
         {step === 1 && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8 flex flex-col items-center text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
-              <Sparkles className="h-8 w-8" strokeWidth={1.5} />
+            <div className="relative h-24 w-56">
+              <Image src="/logo-100.png" alt="Desafio dos 100" fill className="object-contain" priority />
             </div>
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight text-foreground">
